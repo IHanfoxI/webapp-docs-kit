@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1 — 2026-10-13
+
+- The scripts no longer read environment variables. `to_pdf.py` passes its
+  parameters to Microsoft Word as script arguments instead of through the
+  environment, and the cache folder is always `~/.cache/webapp-docs-kit/`.
+
 ## 2.0.0 — 2026-10-13
 
 The kit no longer makes assumptions about the app it documents.

@@ -40,7 +40,7 @@ $missing = @()
 if (-not (Get-Command ffmpeg -ErrorAction SilentlyContinue)) { $missing += 'ffmpeg (video-tutorial)' }
 if (-not (Get-Command pdftoppm -ErrorAction SilentlyContinue)) { $missing += 'Poppler (user-manual)' }
 if (-not (Get-Command python -ErrorAction SilentlyContinue) -and -not (Get-Command py -ErrorAction SilentlyContinue)) { $missing += 'Python (user-manual)' }
-$lo = @($env:ProgramFiles, ${env:ProgramFiles(x86)}) | Where-Object { $_ } |
+$lo = @('C:\Program Files', 'C:\Program Files (x86)') |
       ForEach-Object { Join-Path $_ 'LibreOffice\program\soffice.exe' } | Where-Object { Test-Path $_ }
 $word = Test-Path 'Registry::HKEY_CLASSES_ROOT\Word.Application'
 if (-not $lo -and -not $word) { $missing += 'LibreOffice or Microsoft Word (user-manual)' }

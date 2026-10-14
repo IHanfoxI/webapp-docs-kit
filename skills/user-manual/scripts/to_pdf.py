@@ -30,8 +30,7 @@ import zipfile
 
 WINDOWS = os.name == 'nt'
 MAC = sys.platform == 'darwin'
-LO_DIRS_WINDOWS = [os.path.join(os.environ.get(v, ''), 'LibreOffice', 'program')
-                   for v in ('ProgramFiles', 'ProgramFiles(x86)') if os.environ.get(v)]
+LO_DIRS_WINDOWS = [r'C:\Program Files\LibreOffice\program', r'C:\Program Files (x86)\LibreOffice\program']
 LO_MAC = '/Applications/LibreOffice.app/Contents'
 
 
@@ -56,18 +55,19 @@ def soffice():
 def with_word(docx, pdf, title, author):
     """Updates fields and the TOC in Microsoft Word and exports the PDF (Windows)."""
     ps = r'''
+param([string]$Docx, [string]$Pdf, [string]$Title, [string]$Author)
 $ErrorActionPreference = 'Stop'
 $word = New-Object -ComObject Word.Application
 $word.Visible = $false
 $word.DisplayAlerts = 0
 try {
-    $doc = $word.Documents.Open($env:WDK_DOCX, $false, $false)
+    $doc = $word.Documents.Open($Docx, $false, $false)
     foreach ($t in $doc.TablesOfContents) { $t.Update() }
     $doc.Fields.Update() | Out-Null
     foreach ($t in $doc.TablesOfContents) { $t.Update() }
     # Document properties are late-bound COM objects: PowerShell needs InvokeMember.
     $props = $doc.BuiltInDocumentProperties
-    foreach ($kv in @(@('Title', $env:WDK_TITLE), @('Author', $env:WDK_AUTHOR))) {
+    foreach ($kv in @(@('Title', $Title), @('Author', $Author))) {
         if ($kv[1]) {
             $p = [System.__ComObject].InvokeMember('Item', 'GetProperty', $null, $props, @($kv[0]))
             [System.__ComObject].InvokeMember('Value', 'SetProperty', $null, $p, @($kv[1])) | Out-Null
@@ -75,28 +75,35 @@ try {
     }
     $doc.Save()
     # SaveAs2 as wdFormatPDF (17) keeps the document properties; ExportAsFixedFormat drops them.
-    $doc.SaveAs2([ref]$env:WDK_PDF, [ref]17)
+    $doc.SaveAs2([ref]$Pdf, [ref]17)
 } finally {
     # wdDoNotSaveChanges. Never leave a hidden Word holding the file.
     try { $word.Quit([ref]0) } catch { }
     [System.Runtime.InteropServices.Marshal]::ReleaseComObject($word) | Out-Null
 }
 '''
-    env = {**os.environ, 'WDK_DOCX': docx, 'WDK_PDF': pdf, 'WDK_TITLE': title, 'WDK_AUTHOR': author}
-    code = subprocess.call(['powershell', '-NoProfile', '-NonInteractive', '-Command', ps], env=env)
+    work = tempfile.mkdtemp(prefix='wdk-word-')
+    script = os.path.join(work, 'export.ps1')
+    with open(script, 'w', encoding='utf-8-sig') as f:
+        f.write(ps)
+    try:
+        code = subprocess.call(['powershell', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', script,
+                                '-Docx', docx, '-Pdf', pdf, '-Title', title, '-Author', author])
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
     if code:
         sys.exit('Error: Microsoft Word could not export the PDF.')
 
 
-def with_libreoffice(docx, pdf, title, author):
+def with_libreoffice(docx, pdf, title, author, relaunched=False):
     try:
         import uno
         from com.sun.star.beans import PropertyValue
     except ImportError:
         other = python_with_uno()
-        if other and not os.environ.get('WDK_RELAUNCHED'):   # only once: no loops
+        if other and not relaunched:   # only once: no loops
             sys.exit(subprocess.call([other, os.path.abspath(__file__), docx, '--title', title, '--author', author,
-                                      '--engine', 'libreoffice'], env={**os.environ, 'WDK_RELAUNCHED': '1'}))
+                                      '--engine', 'libreoffice', '--relaunched']))
         sys.exit('Error: the uno module is missing. Linux: sudo apt install python3-uno. Windows/macOS: install LibreOffice.')
 
     def prop(name, value):
@@ -170,6 +177,7 @@ def main():
     ap.add_argument('--title', default='')
     ap.add_argument('--author', default='')
     ap.add_argument('--engine', choices=['auto', 'libreoffice', 'word'], default='auto')
+    ap.add_argument('--relaunched', action='store_true', help=argparse.SUPPRESS)
     a = ap.parse_args()
 
     docx = os.path.abspath(a.docx)
@@ -182,7 +190,7 @@ def main():
     if engine == 'libreoffice':
         if not soffice():
             sys.exit('Error: LibreOffice (soffice) was not found.')
-        with_libreoffice(docx, pdf, a.title, a.author)
+        with_libreoffice(docx, pdf, a.title, a.author, a.relaunched)
     else:
         with_word(docx, pdf, a.title, a.author)
     scrub(docx)

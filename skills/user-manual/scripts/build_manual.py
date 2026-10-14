@@ -31,8 +31,7 @@ from xml.sax.saxutils import escape
 HERE = os.path.dirname(os.path.abspath(__file__))
 # The default template is not shipped as a binary: build_template.py writes it to the
 # user cache the first time it is needed.
-DEFAULT_TEMPLATE = os.path.join(os.environ.get('XDG_CACHE_HOME') or os.path.join(os.path.expanduser('~'), '.cache'),
-                                'webapp-docs-kit', 'manual-template-v2.docx')
+DEFAULT_TEMPLATE = os.path.join(os.path.expanduser('~'), '.cache', 'webapp-docs-kit', 'manual-template-v2.docx')
 
 EMU_PER_TWIP = 635
 EMU_MAX_WIDTH = 5580000               # ~15.5 cm

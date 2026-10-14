@@ -20,8 +20,7 @@ import os
 import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_OUT = os.path.join(os.environ.get('XDG_CACHE_HOME') or os.path.join(os.path.expanduser('~'), '.cache'),
-                           'webapp-docs-kit', 'manual-template-v2.docx')
+DEFAULT_OUT = os.path.join(os.path.expanduser('~'), '.cache', 'webapp-docs-kit', 'manual-template-v2.docx')
 PRIMARY = '1F3A5F'
 ACCENT = '2563EB'
 

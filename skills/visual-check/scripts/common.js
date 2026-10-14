@@ -22,7 +22,7 @@ function slug(s) {
 
 // Working files live outside every repository: ~/.cache/webapp-docs-kit/...
 function cacheDir(...parts) {
-    return path.join(process.env.XDG_CACHE_HOME || path.join(os.homedir(), '.cache'), KIT, ...parts);
+    return path.join(os.homedir(), '.cache', KIT, ...parts);
 }
 
 function expandHome(p) {
