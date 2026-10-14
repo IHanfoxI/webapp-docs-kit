@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 /*
- * capture.js — runs a role's walkthrough and saves the manual screenshots.
+ * capture.js — runs a walkthrough and saves the manual screenshots.
  *
- * Usage: node capture.js docs/webapp-docs.json docs/manuals/<role>/walkthrough.json
+ * Usage: node capture.js docs/webapp-docs.json docs/manuals/<name>/walkthrough.json
  *
  * Saves one PNG for every step with "screenshot": "<name>", taken after the step runs,
  * in <walkthrough folder>/screenshots/<name>.png. "mark" draws the red box,
@@ -20,7 +20,7 @@ async function main() {
     const [configFile, walkFile] = process.argv.slice(2);
     if (!walkFile) fail('usage: node capture.js <webapp-docs.json> <walkthrough.json>');
     const config = loadConfig(configFile);
-    const walk = loadWalkthrough(walkFile, config);
+    const walk = loadWalkthrough(walkFile);
     const outDir = path.join(walk._dir, 'screenshots');
     fs.mkdirSync(outDir, { recursive: true });
 

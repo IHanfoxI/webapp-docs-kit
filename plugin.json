@@ -1,14 +1,14 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "webapp-docs-kit",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Visual checks, user manuals (PDF/DOCX) and video walkthroughs (MP4) for web apps, captured from the real app with Playwright.",
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "Web App Docs Kit",
         "shortDescription": "Screenshots, manuals and videos",
-        "longDescription": "Three skills for web apps: /visual-check screenshots the screens a change touches and reports JS errors, failed requests and blank pages; /user-manual writes one PDF/DOCX manual per role with real screenshots; /video-tutorial renders one MP4 walkthrough per role with zoom, a red highlight box, a cursor and captions.",
+        "longDescription": "Three skills for web apps: /visual-check screenshots the screens a change touches and reports JS errors, failed requests and blank pages; /user-manual writes PDF/DOCX user manuals with real screenshots; /video-tutorial renders MP4 walkthroughs with zoom, a red highlight box, a cursor and captions.",
         "developerName": "Diego Calderón C.",
         "category": "Productivity",
         "websiteURL": "https://github.com/IHanfoxI/webapp-docs-kit"

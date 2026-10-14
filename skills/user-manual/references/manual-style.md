@@ -1,6 +1,6 @@
 # User manual style guide
 
-Every manual has the same structure, tone and format.
+Every manual has the same structure, tone and format. Leave out sections that do not apply.
 
 ## Structure
 
@@ -9,10 +9,10 @@ template. The author writes from the preface on.
 
 | Section | Content |
 |---|---|
-| Preface (*About this manual*) | One paragraph: which part of the app it covers, for which role, and the topics included. A second paragraph: what is out of scope (other manuals) and a note that screenshots are illustrative and personal data is blurred. |
-| 1. Introduction | 1.1 Purpose: which process the app supports. 1.2 What the *Role* can do: bullets starting with a verb, followed by what other roles do. |
-| 2. Getting started | 2.1 Signing in: browser, address, credentials and what happens when a link is opened without a session. 2.2 Home page: figure and a table of its sections. 2.3 Navigation: table Option / Description and how to sign out. |
-| 3 to N. Features | One section per task of the role, in the order users perform them. |
+| Preface (*About this manual*) | One paragraph: which part of the app it covers, who it is for, and the topics included. A second paragraph: what is out of scope (other manuals) and a note that screenshots are illustrative and personal data is blurred. |
+| 1. Introduction | 1.1 Purpose: which process the app supports. 1.2 What you can do: bullets starting with a verb. |
+| 2. Getting started | 2.1 Opening the app: browser and address (and how to sign in, if the app has sign-in). 2.2 Home page: figure and a table of its sections. 2.3 Navigation: table Option / Description. |
+| 3 to N. Features | One section per task, in the order users perform them. |
 | Second to last (optional) | Reports, email notifications and other cross-cutting features. |
 | Last: Tips and support | Good practices, common mistakes and who to contact. |
 
@@ -25,7 +25,7 @@ template. The author writes from the preface on.
 4. A **Field / Description** table. Required fields end with ` *`.
    For buttons in a table, use **Button / Action**.
 5. A `> **Important:** ...` note for restrictions: what cannot be done, in
-   which state an action becomes available, or which role does it.
+   which state an action becomes available, or who can do it.
 
 ## Writing
 
@@ -48,5 +48,5 @@ template. The author writes from the preface on.
 
 ## File names
 
-`docs/manuals/<role>/manual-<app>-<role>.pdf`, lowercase, no accents or spaces.
-Example: `manual-acme-orders-clerk.pdf`.
+`docs/manuals/<name>/manual-<app>-<name>.pdf`, lowercase, no accents or spaces.
+Example: `manual-acme-orders-getting-started.pdf`.

@@ -9,13 +9,11 @@
  */
 const fs = require('fs');
 const path = require('path');
-const { DEFAULT_CONFIG, fail, loadConfig, openBrowser, login, prepare, textOf, mutatingPattern, slug, cacheDir } = require('./common');
+const { DEFAULT_CONFIG, fail, loadConfig, openBrowser, prepare, textOf, mutatingPattern, slug, cacheDir } = require('./common');
 const { settle } = require('./walkthrough');
 
 const HELP = `Usage: node check.js <path> [options]
   --config FILE        project config (default ${DEFAULT_CONFIG})
-  --role ROLE          role to sign in with (required when there is more than one)
-  --no-login           do not sign in (public pages)
   --click "SEL1|SEL2"  click in order (panels, tabs, dropdowns, dialogs)
   --type "SEL|text"    type into a field (filters, search boxes)
   --wait MS|SEL        extra wait, or wait until a selector is visible
@@ -26,14 +24,13 @@ const HELP = `Usage: node check.js <path> [options]
   --mobile             phone viewport (390x844)
   --width N --height N viewport (default 1440x900)
   --html               also save the rendered HTML
-  --session FILE       seed a session into storage (SPA without a scriptable login)
   --mock FILE          mocked JSON responses {"**/api/x": {...}}
   --allow-change       allow clicking buttons that change data (only with authorization)
   --out NAME           output file name`;
 
 function parseArgs(argv) {
     const a = { _: [] };
-    const withValue = ['config', 'role', 'click', 'type', 'wait', 'text', 'exists', 'redact', 'width', 'height', 'session', 'mock', 'out'];
+    const withValue = ['config', 'click', 'type', 'wait', 'text', 'exists', 'redact', 'width', 'height', 'mock', 'out'];
     for (let i = 0; i < argv.length; i++) {
         const k = argv[i].replace(/^--/, '');
         if (!argv[i].startsWith('--')) a._.push(argv[i]);
@@ -48,28 +45,16 @@ async function main() {
     if (!o._.length || o.help) { console.log(HELP); process.exit(o._.length ? 0 : 1); }
     const route = o._[0];
     const config = loadConfig(o.config || DEFAULT_CONFIG);
-    const roles = Object.keys(config.roles);
-    const role = o.role || (roles.length === 1 ? roles[0] : null);
-    if (!o['no-login'] && !o.session && config.login && !role) fail(`pass --role (${roles.join(', ')})`);
-    if (role && !config.roles[role]) fail(`role "${role}" is not in the config`);
 
     const width = o.mobile ? 390 : parseInt(o.width || 1440, 10);
     const height = o.mobile ? 844 : parseInt(o.height || 900, 10);
-    const { browser, context, page } = await openBrowser({ width, height, scale: 1, config });
+    const { browser, page } = await openBrowser({ width, height, scale: 1, config });
 
     const problems = [];
     page.on('pageerror', (e) => problems.push('JS: ' + e.message.split('\n')[0]));
     page.on('console', (m) => { if (m.type() === 'error') problems.push('console: ' + m.text().slice(0, 200)); });
     page.on('response', (r) => { if (r.status() >= 400) problems.push(`HTTP ${r.status()}: ${r.url().slice(0, 160)}`); });
 
-    if (o.session) {
-        // {key, value, storage: "local"|"session"}
-        const s = JSON.parse(fs.readFileSync(o.session, 'utf8'));
-        await context.addInitScript((s) => {
-            (s.storage === 'local' ? localStorage : sessionStorage)
-                .setItem(s.key, typeof s.value === 'string' ? s.value : JSON.stringify(s.value));
-        }, s);
-    }
     if (o.mock) {
         for (const [pattern, body] of Object.entries(JSON.parse(fs.readFileSync(o.mock, 'utf8')))) {
             await page.route(pattern, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) }));
@@ -77,8 +62,6 @@ async function main() {
     }
 
     try {
-        if (!o['no-login'] && !o.session) await login(page, config, role);
-        problems.length = 0;   // whatever happened during login is not part of the checked screen
         const resp = await page.goto(config.baseUrl + route, { waitUntil: 'networkidle' });
         await settle(page, o.wait && /^\d+$/.test(o.wait) ? parseInt(o.wait, 10) : o.wait);
 
@@ -111,7 +94,7 @@ async function main() {
         await prepare(page, config, { redact: o.redact ? o.redact.split('|') : [] });
         const dir = cacheDir('screenshots', slug(config.app));
         fs.mkdirSync(dir, { recursive: true });
-        const base = o.out || [o['no-login'] ? 'public' : role || 'public', route.replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '') || 'root', o.mobile ? 'mobile' : ''].filter(Boolean).join('-');
+        const base = o.out || [route.replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '') || 'root', o.mobile ? 'mobile' : ''].filter(Boolean).join('-');
         const png = path.join(dir, base + '.png');
         if (o.full) {
             // Grow the viewport instead of fullPage: stitching duplicates position:fixed elements.
@@ -127,8 +110,9 @@ async function main() {
 
         const bodyText = await page.evaluate(() => document.body ? document.body.innerText.trim().length : 0);
         if (resp && resp.status() === 200 && bodyText === 0) problems.push('blank page with HTTP 200: check the server log for a render error');
-        if (config.login && !o['no-login'] && new URL(page.url()).pathname.endsWith(config.login.path)) {
-            problems.push('ended on the login page: does this role have access to this path?');
+        const pathOf = (u) => new URL(u).pathname.replace(/\/+$/, '');
+        if (pathOf(page.url()) !== pathOf(config.baseUrl + route)) {
+            problems.push(`redirected to ${page.url()}: the page may need sign-in or another precondition (ask the user how to handle it)`);
         }
         console.log(problems.length ? 'problems:\n  - ' + [...new Set(problems)].join('\n  - ') : 'problems: none');
     } finally {

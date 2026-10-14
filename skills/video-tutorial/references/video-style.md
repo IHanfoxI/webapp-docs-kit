@@ -15,7 +15,7 @@ The goal is to teach people how to use the app, not to promote it.
 
 ## Structure
 
-1. **Cover** (4 s): optional logo, "Video walkthrough", app name, role and walkthrough title.
+1. **Cover** (4 s): optional logo, "Video walkthrough", app name and walkthrough title.
 2. **Scene card** (2.4 s) whenever the scene changes.
 3. **Steps.** Every step follows this sequence:
    - the camera pans and zooms to the element (1 s, ease-in-out), cross-fading
@@ -27,7 +27,7 @@ The goal is to teach people how to use the app, not to promote it.
      bottom, or at the top if it would cover the highlighted element;
    - reading pause: 2.6 to 8 s depending on the text length;
    - action: a red click pulse and a fade to the result, or text appearing in the field.
-4. **Closing card** (4.5 s): optional logo, "End of walkthrough", app, role and support contact.
+4. **Closing card** (4.5 s): optional logo, "End of walkthrough", app, walkthrough title and support contact.
 
 ## Why frame by frame instead of a screencast
 

@@ -61,36 +61,3 @@ node --version; ffmpeg -version | Select-Object -First 1; python --version; pdft
 You can also run everything inside WSL following the Linux instructions, with
 the agent running in WSL too. If the app under test runs on Windows, enable
 `networkingMode=mirrored` in `%USERPROFILE%\.wslconfig` so `localhost` reaches it.
-
-## Test credentials
-
-Every role you check or document needs a **test** user, never a real one.
-Keep the credentials outside any repository, in one file per project:
-
-Linux / macOS / Git Bash:
-
-```bash
-mkdir -p ~/.config/webapp-docs-kit && chmod 700 ~/.config/webapp-docs-kit
-cat > ~/.config/webapp-docs-kit/acme-orders.env <<'EOF'
-export ACME_CLERK_USER='clerk@test.example.com'
-export ACME_CLERK_PASS='test-user-password'
-EOF
-chmod 600 ~/.config/webapp-docs-kit/acme-orders.env
-source ~/.config/webapp-docs-kit/acme-orders.env && claude   # or codex, gemini...
-```
-
-Inside a Claude Code session that is already open: `! source ~/.config/webapp-docs-kit/acme-orders.env`
-(this works on Windows too, where Claude Code runs Git Bash).
-
-PowerShell (for agents started from PowerShell):
-
-```powershell
-New-Item -ItemType Directory -Force $HOME\.config\webapp-docs-kit | Out-Null
-icacls $HOME\.config\webapp-docs-kit /inheritance:r /grant:r "${env:USERNAME}:(OI)(CI)F"
-# $HOME\.config\webapp-docs-kit\acme-orders.ps1:
-#   $env:ACME_CLERK_USER = 'clerk@test.example.com'
-#   $env:ACME_CLERK_PASS = 'test-user-password'
-. $HOME\.config\webapp-docs-kit\acme-orders.ps1; codex
-```
-
-The variable names are the ones you put in `credentialsEnv` in `docs/webapp-docs.json`.

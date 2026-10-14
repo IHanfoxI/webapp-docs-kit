@@ -1,17 +1,13 @@
 # Walkthrough format
 
-`docs/manuals/<role>/walkthrough.json`, one per role. Used by `capture.js` (manual) and `record.js` (video).
+`docs/manuals/<name>/walkthrough.json`, one per manual or video. The folder
+name identifies it (`getting-started`, `orders`...). Used by `capture.js`
+(manual) and `record.js` (video).
 
 ```json
 {
-  "role": "clerk",
   "title": "Managing orders",
   "scenes": [
-    { "title": "Sign in", "steps": [
-      { "go": "/login", "public": true, "mark": "form.login", "text": "Open the app in your browser.", "screenshot": "login" },
-      { "type": "input[name='username']", "value": "jane.doe", "text": "Enter your **username**." },
-      { "click": "button[type='submit']", "simulate": true, "text": "Click **Sign in**." }
-    ]},
     { "title": "Find an order", "steps": [
       { "go": "/orders", "text": "Open **Orders** from the menu.", "screenshot": "orders" },
       { "type": "input[name='search']", "value": "1042", "text": "Type part of the **order number** to filter the list." },
@@ -25,7 +21,7 @@ Each step has **one** action:
 
 | Action | What it does |
 |---|---|
-| `"go": "/path"` | Navigates to `baseUrl + path`. Before the first `go` without `"public": true`, it signs in off camera with the role's credentials. |
+| `"go": "/path"` | Navigates to `baseUrl + path`. The first step must be a `go`. |
 | `"click": "sel"` | Clicks the element. With `"simulate": true` it only shows the click. |
 | `"type": "sel"` + `"value"` | Types into the field in chunks. In the video the text appears gradually. |
 | `"highlight": "sel"` | Does nothing: it only marks and explains an element. |
@@ -46,6 +42,9 @@ Options for any step:
 | `pressEnter` | On `type`: press Enter afterwards. Only for search and filter boxes. |
 | `simulate` | On `click`: shows the click without performing it. Use it on buttons that save, delete, send, sign or pay. |
 | `allowChange` | Allows clicking a button that changes data. Only with explicit authorization and in a test environment. |
+
+The kit does not sign in. If the screens are behind a login or another
+precondition, ask the user how to handle it before writing the walkthrough.
 
 If the next step depends on a simulated click (for example the confirmation
 dialog of Delete), the walkthrough cannot show it. End the scene at the

@@ -71,7 +71,7 @@ function build(tl) {
         card: { kind, ...data, alpha: Math.min(1, t / 0.4, (d - t) / 0.4) },
     }));
 
-    card('cover', { app: tl.app, role: tl.role, title: tl.title }, T.cover);
+    card('cover', { app: tl.app, title: tl.title }, T.cover);
 
     let cam = { s: 1, x: 0, y: 0 };
     let img = null;
@@ -81,7 +81,7 @@ function build(tl) {
     for (const p of tl.steps) {
         if (p.scene && p.scene !== scene) {
             scene = p.scene;
-            card('scene', { text: scene, app: tl.app, role: tl.role }, T.scene);
+            card('scene', { text: scene, app: tl.app, title: tl.title }, T.scene);
         }
         const camNew = camera(p);
         const camPrev = cam, imgPrev = img || p.before, cursorPrev = cursor;
@@ -147,7 +147,7 @@ function build(tl) {
     // Back to the full screen, then the closing card.
     const last = img, camEnd = cam;
     add(1.0, (t) => ({ a: last, cam: mixCam(camEnd, { s: 1, x: 0, y: 0 }, ease(t)) }));
-    card('end', { app: tl.app, role: tl.role, support: tl.support }, T.end);
+    card('end', { app: tl.app, title: tl.title, support: tl.support }, T.end);
     return { seg, subs, duration: clock };
 }
 
@@ -199,10 +199,10 @@ window.draw=async(e)=>{
   if(t){
     $('card').style.opacity=t.alpha;
     const html = t.kind==='cover'
-      ? logo()+'<div class="k">'+esc(L.cover)+'</div><div class="t">'+esc(t.app)+'</div><div class="r">'+esc(t.role)+'</div>'+(t.title?'<div class="s">'+esc(t.title)+'</div>':'')
+      ? logo()+'<div class="k">'+esc(L.cover)+'</div><div class="t">'+esc(t.app)+'</div>'+(t.title?'<div class="r">'+esc(t.title)+'</div>':'')
       : t.kind==='scene'
-      ? '<div class="k">'+esc(t.app)+' · '+esc(t.role)+'</div><div class="bar"></div><div class="t">'+esc(t.text)+'</div>'
-      : logo()+'<div class="t">'+esc(L.end)+'</div><div class="r">'+esc(t.app)+' · '+esc(t.role)+'</div>'+(t.support?'<div class="s">'+esc(t.support)+'</div>':'');
+      ? '<div class="k">'+esc(t.app)+(t.title?' · '+esc(t.title):'')+'</div><div class="bar"></div><div class="t">'+esc(t.text)+'</div>'
+      : logo()+'<div class="t">'+esc(L.end)+'</div><div class="r">'+esc(t.app)+(t.title?' · '+esc(t.title):'')+'</div>'+(t.support?'<div class="s">'+esc(t.support)+'</div>':'');
     if($('card').dataset.html!==html){$('card').dataset.html=html;$('card').innerHTML=html;await Promise.all([...$('card').querySelectorAll('img')].map(i=>i.decode().catch(()=>{})))}
     if(t.alpha>=1){$('cam').style.display='none';$('sub').style.display='none';$('cursor').style.display='none';$('marks').innerHTML='';return}
   }

@@ -30,10 +30,16 @@ Things that make screenshots of real web apps come out wrong, and how to avoid t
 
 ## Single-page apps
 
-- Use `"noNavigation": true` in `login` when signing in does not reload the page.
-- If the login cannot be scripted (SSO, MFA), seed the session with
-  `check.js --session session.json` (`{"key": "token", "value": "...", "storage": "local"}`)
-  using a **test** session, or mock the API with `--mock`.
+- Client-side routes can take a moment after `networkidle`: wait for an element
+  of the target view (`"wait": "main h1"`).
+- Screens that need data from an API can be shown with mocked responses
+  (`check.js --mock mocks.json`, `{"**/api/orders": [...]}`).
+
+## Sign-in and other preconditions
+
+The kit does not sign in or handle credentials. If a screen redirects to a
+login page, needs a role, a feature flag or other state, ask the user how they
+want to handle it. Do not work around access controls.
 
 ## JSF / PrimeFaces
 

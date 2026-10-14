@@ -48,4 +48,4 @@ jobs:
         run: |
           python skills/user-manual/scripts/build_template.py "$RUNNER_TEMP/template.docx"
           cd examples/todomvc/docs/manuals
-          python ../../../../skills/user-manual/scripts/build_manual.py visitor/manual.md "$RUNNER_TEMP/manual.docx" --template "$RUNNER_TEMP/template.docx"
+          python ../../../../skills/user-manual/scripts/build_manual.py getting-started/manual.md "$RUNNER_TEMP/manual.docx" --template "$RUNNER_TEMP/template.docx"

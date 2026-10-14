@@ -1,10 +1,10 @@
 'use strict';
 /*
- * walkthrough.js — runs a walkthrough (docs/manuals/<role>/walkthrough.json) against the real app.
+ * walkthrough.js — runs a walkthrough (docs/manuals/<name>/walkthrough.json) against the real app.
  * The same walkthrough feeds the manual screenshots and the video recording:
  * each consumer gets hooks before and after every step.
  */
-const { fail, login, prepare, rect, textOf, mutatingPattern } = require('./common');
+const { fail, prepare, rect, textOf, mutatingPattern } = require('./common');
 
 const ACTIONS = ['go', 'click', 'type', 'highlight'];
 
@@ -36,17 +36,12 @@ function validate(walk) {
 async function run(page, config, walk, hooks) {
     validate(walk);
     const mutating = mutatingPattern(config);
-    let loggedIn = false;
     let index = 0;
     for (const scene of walk.scenes) {
         for (const step of scene.steps) {
             index++;
             const info = { scene, index, target: null, marks: [] };
             if (step.go !== undefined) {
-                if (!step.public && !loggedIn) {
-                    await login(page, config, walk.role);   // off camera
-                    loggedIn = true;
-                }
                 await page.goto(config.baseUrl + step.go, { waitUntil: 'networkidle' });
                 await settle(page, step.wait);
                 await prepare(page, config, step);

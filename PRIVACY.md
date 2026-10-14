@@ -15,9 +15,8 @@ Nothing. The skills have no telemetry, analytics, accounts or remote logging.
 - **Your web app**, through a local headless browser, at the `baseUrl` you
   configure in `docs/webapp-docs.json`. Screenshots can contain anything that
   app shows; selectors listed in `redact` are blurred before each capture.
-- **Test credentials**, read from the environment variables you name in
-  `credentialsEnv` and typed only into your app's login form. They are never
-  written to disk, logged or sent anywhere else.
+- **No credentials.** The skills never read, ask for, type or store
+  passwords, tokens or cookies.
 - **Files** written to your project (`docs/`) and to `~/.cache/webapp-docs-kit/`
   and your video output folder.
 

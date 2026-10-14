@@ -1,6 +1,6 @@
 'use strict';
 /*
- * common.js — project config, browser and login. Used by check.js,
+ * common.js — project config and browser. Used by check.js,
  * user-manual/scripts/capture.js and video-tutorial/scripts/record.js.
  */
 const fs = require('fs');
@@ -29,34 +29,24 @@ function expandHome(p) {
     return p.startsWith('~') ? path.join(os.homedir(), p.slice(1)) : p;
 }
 
-// The project's docs/webapp-docs.json. Credentials never go there: only the
-// names of the environment variables that hold them.
+// The project's docs/webapp-docs.json.
 function loadConfig(file) {
     if (!fs.existsSync(file)) fail(`${file} does not exist`);
     const config = JSON.parse(fs.readFileSync(file, 'utf8'));
     config._dir = path.dirname(path.resolve(file));
-    for (const k of ['app', 'baseUrl', 'roles']) {
+    for (const k of ['app', 'baseUrl']) {
         if (!config[k]) fail(`missing "${k}" in ${file}`);
     }
     return config;
 }
 
-function loadWalkthrough(file, config) {
+// A walkthrough is identified by its folder: docs/manuals/<name>/walkthrough.json.
+function loadWalkthrough(file) {
     if (!fs.existsSync(file)) fail(`${file} does not exist`);
     const walk = JSON.parse(fs.readFileSync(file, 'utf8'));
-    if (!config.roles[walk.role]) fail(`role "${walk.role}" from the walkthrough is not in the config`);
     walk._dir = path.dirname(path.resolve(file));
+    walk._name = slug(path.basename(walk._dir)) || 'walkthrough';
     return walk;
-}
-
-function credentials(config, role) {
-    const env = (config.roles[role] || {}).credentialsEnv || {};
-    const cred = {};
-    for (const [key, variable] of Object.entries(env)) {
-        cred[key] = process.env[variable];
-        if (!cred[key]) fail(`environment variable ${variable} (role ${role}) is not set`);
-    }
-    return cred;
 }
 
 async function openBrowser({ width, height, scale, config }) {
@@ -68,28 +58,6 @@ async function openBrowser({ width, height, scale, config }) {
         locale: config.locale || 'en-US',
     });
     return { browser, context, page: await context.newPage() };
-}
-
-async function login(page, config, role) {
-    const l = config.login;
-    if (!l) return;
-    const { username, password } = credentials(config, role);
-    await page.goto(config.baseUrl + l.path, { waitUntil: 'networkidle' });
-    await page.click(l.usernameSelector);
-    await page.fill(l.usernameSelector, '');
-    await page.type(l.usernameSelector, username, { delay: 15 });
-    await page.fill(l.passwordSelector, password);
-    if (l.noNavigation) {
-        await page.click(l.submitSelector);
-    } else {
-        await Promise.all([
-            page.waitForNavigation({ waitUntil: 'networkidle' }),
-            page.click(l.submitSelector),
-        ]);
-    }
-    if (l.afterLoginSelector) {
-        await page.waitForSelector(l.afterLoginSelector, { timeout: 20000 });
-    }
 }
 
 // Hides dev chrome and blurs personal data before every screenshot.
@@ -133,5 +101,5 @@ async function textOf(page, selector) {
 
 module.exports = {
     KIT, DEFAULT_CONFIG, fail, slug, cacheDir, expandHome, loadConfig, loadWalkthrough,
-    openBrowser, login, prepare, rect, textOf, mutatingPattern,
+    openBrowser, prepare, rect, textOf, mutatingPattern,
 };

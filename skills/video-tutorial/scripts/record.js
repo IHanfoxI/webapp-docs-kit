@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 /*
- * record.js — runs a role's walkthrough on a Full HD "monitor" and saves every state.
+ * record.js — runs a walkthrough on a Full HD "monitor" and saves every state.
  *
- * Usage: node record.js docs/webapp-docs.json docs/manuals/<role>/walkthrough.json [--work DIR]
+ * Usage: node record.js docs/webapp-docs.json docs/manuals/<name>/walkthrough.json [--work DIR]
  *
  * Not a real-time recording: it takes a screenshot before and after every step (and a few
  * while typing) at 1920x1080 with device scale 2 (3840x2160 real pixels). That keeps the
@@ -23,9 +23,9 @@ async function main() {
     const [configFile, walkFile] = args;
     if (!walkFile) fail('usage: node record.js <webapp-docs.json> <walkthrough.json> [--work DIR]');
     const config = loadConfig(configFile);
-    const walk = loadWalkthrough(walkFile, config);
+    const walk = loadWalkthrough(walkFile);
     const i = args.indexOf('--work');
-    const work = i > 0 ? expandHome(args[i + 1]) : cacheDir('video', slug(config.app), walk.role);
+    const work = i > 0 ? expandHome(args[i + 1]) : cacheDir('video', slug(config.app), walk._name);
     fs.rmSync(work, { recursive: true, force: true });
     fs.mkdirSync(work, { recursive: true });
 
@@ -70,7 +70,6 @@ async function main() {
     if (logo && !fs.existsSync(logo)) fail(`video.logo not found: ${logo}`);
     const timeline = {
         app: config.app,
-        role: config.roles[walk.role].name || walk.role,
         title: walk.title || '',
         support: config.support || '',
         logo,

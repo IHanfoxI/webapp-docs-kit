@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.0.0 — 2026-10-13
+
+The kit no longer makes assumptions about the app it documents.
+
+- **Breaking:** removed sign-in and credentials (`login`, `credentialsEnv`,
+  `--role`, `--no-login`, `--session`, `"public"`). If screens are behind a login
+  or any other precondition, the agent stops and asks the user how to handle it.
+- **Breaking:** removed roles. `roles` in the config and `role` in walkthroughs are
+  gone; each manual or video is a named walkthrough (`docs/manuals/<name>/`).
+  The manual front matter uses an optional `subtitle` instead of `role`.
+- `check.js` reports unexpected redirects (for example to a login page).
+- The default Word template is cached as `manual-template-v2.docx`.
+
 ## 1.0.1 — 2026-10-13
 
 Prepares the plugin for Anthropic's plugin directory.

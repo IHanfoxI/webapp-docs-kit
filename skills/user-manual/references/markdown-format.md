@@ -6,7 +6,7 @@ paragraph.
 ```markdown
 ---
 app: Acme Orders
-role: Order Clerk
+subtitle: Getting started
 organization: Acme Corp — Operations
 title: User manual
 date: October 2026
@@ -38,7 +38,7 @@ b) Step two
 
 | Element | Result |
 |---|---|
-| front matter | Cover: `title` (default "User manual"), `app`, `role`, `organization` and `date` (default: current month and year). `app` and `role` are required. Also `preface_title` (default "About this manual"), `contents_title` (default "Contents") and `figure_label` (default "Figure") for manuals in other languages. |
+| front matter | Cover: `title` (default "User manual"), `app`, `subtitle` (optional, e.g. the topic or audience), `organization` and `date` (default: current month and year). Only `app` is required. Also `preface_title` (default "About this manual"), `contents_title` (default "Contents") and `figure_label` (default "Figure") for manuals in other languages. |
 | `#` | Heading 1, numbered automatically ("1. Introduction"), with an accent line and a table of contents entry. |
 | `##` | Heading 2, numbered automatically ("1.1 Purpose"), in the table of contents. |
 | `###` | Heading 3, not numbered, not in the table of contents. |

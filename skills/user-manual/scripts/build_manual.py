@@ -6,7 +6,7 @@ Usage:
     python3 build_manual.py manual.md output.docx [--template template.docx]
 
 Without --template it uses the neutral template from build_template.py, generated
-once into ~/.cache/webapp-docs-kit/manual-template.docx.
+once into ~/.cache/webapp-docs-kit/manual-template-v2.docx.
 
 The Markdown follows references/markdown-format.md: front matter with the cover data,
 the preface text before the first "#", then the sections. The template keeps the cover,
@@ -32,7 +32,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # The default template is not shipped as a binary: build_template.py writes it to the
 # user cache the first time it is needed.
 DEFAULT_TEMPLATE = os.path.join(os.environ.get('XDG_CACHE_HOME') or os.path.join(os.path.expanduser('~'), '.cache'),
-                                'webapp-docs-kit', 'manual-template.docx')
+                                'webapp-docs-kit', 'manual-template-v2.docx')
 
 EMU_PER_TWIP = 635
 EMU_MAX_WIDTH = 5580000               # ~15.5 cm
@@ -40,7 +40,7 @@ EMU_MAX_HEIGHT = 4300000              # ~11.9 cm: a tall screenshot does not eat
 DEFAULT_PRIMARY = '1F3A5F'
 DEFAULT_ACCENT = '2563EB'
 
-MARKERS = ['{{TITLE}}', '{{APP}}', '{{ROLE}}', '{{ORGANIZATION}}', '{{DATE}}',
+MARKERS = ['{{TITLE}}', '{{APP}}', '{{SUBTITLE}}', '{{ORGANIZATION}}', '{{DATE}}',
            '{{PREFACE_TITLE}}', '{{PREFACE}}', '{{CONTENTS_TITLE}}', '{{CONTENT}}']
 STYLES = {'h1': 'heading 1', 'h2': 'heading 2', 'h3': 'heading 3', 'list': 'list paragraph'}
 
@@ -61,9 +61,8 @@ def read_markdown(path):
                 k, v = line.split(':', 1)
                 meta[k.strip()] = v.strip().strip('"\'')
         text = text[m.end():]
-    for k in ('app', 'role'):
-        if not meta.get(k):
-            fail(f'missing "{k}" in the front matter of {path}')
+    if not meta.get('app'):
+        fail(f'missing "app" in the front matter of {path}')
     return meta, text
 
 
@@ -371,14 +370,16 @@ def build(md, out, template):
     values = {
         '{{TITLE}}': meta.get('title', 'User manual'),
         '{{APP}}': meta['app'],
-        '{{ROLE}}': meta['role'],
+        '{{SUBTITLE}}': meta.get('subtitle', ''),
+        '{{HEADER}}': meta['app'] + (' · ' + meta['subtitle'] if meta.get('subtitle') else ''),
         '{{ORGANIZATION}}': meta.get('organization', ''),
         '{{DATE}}': meta.get('date', datetime.date.today().strftime('%B %Y')),
         '{{PREFACE_TITLE}}': meta.get('preface_title', 'About this manual'),
         '{{CONTENTS_TITLE}}': meta.get('contents_title', 'Contents'),
     }
     for marker, value in values.items():
-        doc = replace_paragraph_text(doc, marker, value)
+        if marker in MARKERS:
+            doc = replace_paragraph_text(doc, marker, value)
     for name in list(files):
         if re.fullmatch(r'word/(header|footer)\d*\.xml', name):
             part = files[name].decode('utf-8')

@@ -5,7 +5,7 @@ build_template.py — writes the default manual template.
 Usage:
     python3 build_template.py [output.docx] [--primary 1F3A5F] [--accent 2563EB] [--letter]
 
-Without an output path it writes ~/.cache/webapp-docs-kit/manual-template.docx, the
+Without an output path it writes ~/.cache/webapp-docs-kit/manual-template-v2.docx, the
 template build_manual.py uses by default (it also calls this script when that file is missing).
 
 The template is plain WordprocessingML written from scratch, so it carries no logos and
@@ -21,7 +21,7 @@ import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_OUT = os.path.join(os.environ.get('XDG_CACHE_HOME') or os.path.join(os.path.expanduser('~'), '.cache'),
-                           'webapp-docs-kit', 'manual-template.docx')
+                           'webapp-docs-kit', 'manual-template-v2.docx')
 PRIMARY = '1F3A5F'
 ACCENT = '2563EB'
 
@@ -180,7 +180,7 @@ def header(text_width):
     return ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
             f'<w:hdr {W}><w:p><w:pPr><w:pStyle w:val="Header"/>'
             '<w:pBdr><w:bottom w:val="single" w:sz="4" w:space="4" w:color="D1D5DB"/></w:pBdr><w:jc w:val="right"/></w:pPr>'
-            '<w:r><w:t xml:space="preserve">{{APP}} · {{ROLE}}</w:t></w:r></w:p></w:hdr>')
+            '<w:r><w:t xml:space="preserve">{{HEADER}}</w:t></w:r></w:p></w:hdr>')
 
 
 def footer(text_width):
@@ -198,7 +198,7 @@ def document(accent, page_w, page_h, margin):
           f'<w:b/><w:caps/><w:color w:val="{accent}"/><w:spacing w:val="20"/><w:sz w:val="28"/>') +
         p('{{APP}}', '<w:pStyle w:val="Title"/>') +
         p('', f'<w:pBdr><w:bottom w:val="single" w:sz="24" w:space="1" w:color="{accent}"/></w:pBdr><w:spacing w:after="360"/>') +
-        p('{{ROLE}}', '<w:spacing w:after="2600"/>', f'<w:color w:val="{GRAY}"/><w:sz w:val="36"/>') +
+        p('{{SUBTITLE}}', '<w:spacing w:after="2600"/>', f'<w:color w:val="{GRAY}"/><w:sz w:val="36"/>') +
         p('{{ORGANIZATION}}', '<w:spacing w:after="60"/>', '<w:b/><w:sz w:val="24"/>') +
         p('{{DATE}}', '', f'<w:color w:val="{GRAY}"/><w:sz w:val="24"/>') +
         PAGE_BREAK)
@@ -228,7 +228,7 @@ def document(accent, page_w, page_h, margin):
         p('1. Section title (Heading 1)', f'<w:pStyle w:val="Heading1"/>{h1_line}') +
         p('1.1 Subsection (Heading 2)', '<w:pStyle w:val="Heading2"/>') +
         p('Body text. Button and menu names are written in bold, exactly as they appear on screen.') +
-        item('A bullet with something this role can do.', 1) + item('Another bullet.', 1) +
+        item('A bullet with something readers can do.', 1) + item('Another bullet.', 1) +
         item('Click New.', 2) + item('Fill in the form.', 2) + item('Click Save.', 2) +
         note('Important: a highlighted note for restrictions and warnings.'))
     sect = (f'<w:sectPr><w:headerReference w:type="default" r:id="rId5"/><w:footerReference w:type="default" r:id="rId6"/>'

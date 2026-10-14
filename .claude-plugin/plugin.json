@@ -1,7 +1,7 @@
 {
   "name": "webapp-docs-kit",
   "displayName": "Web App Docs Kit",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Visual checks, user manuals (PDF/DOCX) and video walkthroughs (MP4) for web apps, captured from the real app with Playwright.",
   "author": {
     "name": "Diego Calderón C.",

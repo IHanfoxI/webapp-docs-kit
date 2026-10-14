@@ -1,12 +1,11 @@
 ---
 app: TodoMVC
-role: Visitor
+subtitle: Getting started
 organization: webapp-docs-kit example
 title: User manual
 ---
-This manual explains how to use **TodoMVC** to keep a simple to-do list. It is
-written for the **Visitor** role and covers adding tasks, completing them and
-filtering the list.
+This manual explains how to use **TodoMVC** to keep a simple to-do list. It
+covers adding tasks, completing them and filtering the list.
 
 It is an example generated with webapp-docs-kit against the public Playwright
 demo. Screenshots are illustrative; in a real manual any personal data is blurred.
@@ -18,7 +17,7 @@ demo. Screenshots are illustrative; in a real manual any personal data is blurre
 TodoMVC keeps a list of tasks in your browser so you can track what is still
 pending and what is already done.
 
-## What the Visitor can do
+## What you can do
 
 - Add tasks to the list.
 - Mark tasks as completed.

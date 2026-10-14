@@ -1,9 +1,8 @@
 {
-  "role": "visitor",
   "title": "Managing your to-do list",
   "scenes": [
     { "title": "Add tasks", "steps": [
-      { "go": "/#/", "public": true, "mark": "section.todoapp", "text": "Open **TodoMVC** in your browser.", "screenshot": "home" },
+      { "go": "/#/", "mark": "section.todoapp", "text": "Open **TodoMVC** in your browser.", "screenshot": "home" },
       { "type": "input.new-todo", "value": "Buy groceries", "pressEnter": true, "text": "Type a task in **What needs to be done?** and press **Enter**." },
       { "type": "input.new-todo", "value": "Write the user manual", "pressEnter": true, "text": "Add as many tasks as you need.", "screenshot": "list" }
     ]},
