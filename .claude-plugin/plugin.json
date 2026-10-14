@@ -1,0 +1,14 @@
+{
+  "name": "webapp-docs-kit",
+  "displayName": "Web App Docs Kit",
+  "version": "1.0.0",
+  "description": "Visual checks, user manuals (PDF/DOCX) and video walkthroughs (MP4) for web apps, captured from the real app with Playwright.",
+  "author": {
+    "name": "Diego Calderón C.",
+    "url": "https://github.com/IHanfoxI"
+  },
+  "homepage": "https://github.com/IHanfoxI/webapp-docs-kit",
+  "repository": "https://github.com/IHanfoxI/webapp-docs-kit",
+  "license": "MIT",
+  "keywords": ["playwright", "screenshots", "visual-testing", "user-manual", "documentation", "video", "tutorial"]
+}

@@ -1,0 +1,16 @@
+{
+  "role": "visitor",
+  "title": "Managing your to-do list",
+  "scenes": [
+    { "title": "Add tasks", "steps": [
+      { "go": "/#/", "public": true, "mark": "section.todoapp", "text": "Open **TodoMVC** in your browser.", "screenshot": "home" },
+      { "type": "input.new-todo", "value": "Buy groceries", "pressEnter": true, "text": "Type a task in **What needs to be done?** and press **Enter**." },
+      { "type": "input.new-todo", "value": "Write the user manual", "pressEnter": true, "text": "Add as many tasks as you need.", "screenshot": "list" }
+    ]},
+    { "title": "Complete and filter", "steps": [
+      { "click": "ul.todo-list li:first-child input.toggle", "text": "Tick the **circle** next to a task to mark it as done.", "screenshot": "completed", "mark": "ul.todo-list li:first-child" },
+      { "click": "a[href='#/active']", "text": "Click **Active** to see only pending tasks." },
+      { "highlight": "footer.footer", "text": "The footer shows how many **items are left** and the filters.", "screenshot": "footer", "crop": "section.todoapp" }
+    ]}
+  ]
+}

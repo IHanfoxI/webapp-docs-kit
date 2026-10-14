@@ -1,0 +1,9 @@
+{
+  "name": "webapp-docs-kit-scripts",
+  "private": true,
+  "description": "Visual checks, user manuals and video walkthroughs for web apps",
+  "license": "MIT",
+  "dependencies": {
+    "playwright-core": "1.62.1"
+  }
+}

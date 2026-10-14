@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Generated media and working files
+*.mp4
+*.srt
+*-preview/
+out/
+
+# Word/LibreOffice lock files
+~$*
+.~lock.*#
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Never commit credentials
+*.env
+.env*

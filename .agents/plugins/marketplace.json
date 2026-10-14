@@ -1,0 +1,20 @@
+{
+  "name": "webapp-docs-kit",
+  "interface": {
+    "displayName": "Web App Docs Kit"
+  },
+  "plugins": [
+    {
+      "name": "webapp-docs-kit",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

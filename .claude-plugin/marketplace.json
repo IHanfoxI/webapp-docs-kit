@@ -1,0 +1,15 @@
+{
+  "name": "webapp-docs-kit",
+  "description": "Visual checks, user manuals and video walkthroughs for web apps",
+  "owner": {
+    "name": "Diego Calderón C.",
+    "url": "https://github.com/IHanfoxI"
+  },
+  "plugins": [
+    {
+      "name": "webapp-docs-kit",
+      "source": "./",
+      "description": "Visual checks, user manuals (PDF/DOCX) and video walkthroughs (MP4) for web apps, captured from the real app with Playwright."
+    }
+  ]
+}

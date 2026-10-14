@@ -1,0 +1,12 @@
+{
+  "app": "TodoMVC",
+  "organization": "webapp-docs-kit example",
+  "support": "This is a demo. Replace it with your own help desk contact.",
+  "baseUrl": "https://demo.playwright.dev/todomvc",
+  "roles": {
+    "visitor": { "name": "Visitor" }
+  },
+  "hide": [".info"],
+  "manual": { "width": 1280, "height": 720, "scale": 2 },
+  "video": { "output": "~/Videos/walkthroughs/todomvc" }
+}
