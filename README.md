@@ -441,4 +441,4 @@ Issues and pull requests are welcome.
 
 ## License
 
-[MIT](LICENSE) © Diego Calderón C.
+[MIT](LICENSE) © Diego Calderón C. · [Privacy policy](PRIVACY.md)

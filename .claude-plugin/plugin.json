@@ -19,5 +19,9 @@
     "documentation",
     "video",
     "tutorial"
-  ]
+  ],
+  "documentationUrl": "https://github.com/IHanfoxI/webapp-docs-kit#readme",
+  "supportUrl": "https://github.com/IHanfoxI/webapp-docs-kit/issues",
+  "privacyPolicyUrl": "https://github.com/IHanfoxI/webapp-docs-kit/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/IHanfoxI/webapp-docs-kit/blob/main/LICENSE"
 }
