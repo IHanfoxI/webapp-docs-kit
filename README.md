@@ -23,8 +23,8 @@ any agent that reads [Agent Skills](https://agentskills.io) (`SKILL.md`).
   <em>A manual generated from the <a href="examples/todomvc">TodoMVC example</a> (<a href="https://github.com/IHanfoxI/webapp-docs-kit/releases/latest/download/manual-todomvc-getting-started.pdf">download the PDF</a>).</em>
 </p>
 <p align="center">
-  <img src="docs/images/video-frame.jpg" alt="A frame of a generated video tutorial with zoom, red highlight box and caption" width="70%"><br>
-  <em>A frame of the matching video tutorial.</em>
+  <img src="docs/images/video-demo.gif" alt="Animated excerpt of a generated video tutorial: the camera zooms in, a red box highlights the field and a caption explains each step" width="70%"><br>
+  <em>An excerpt of the matching video tutorial (the real video is 1920×1080 MP4).</em>
 </p>
 
 ---
