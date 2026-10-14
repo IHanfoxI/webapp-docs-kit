@@ -10,6 +10,8 @@ __pycache__/
 *.srt
 *-preview/
 out/
+examples/**/*.docx
+examples/**/*.pdf
 
 # Word/LibreOffice lock files
 ~$*

@@ -29,7 +29,7 @@ published plugin: existing installs are recorded under the old name.
 4. Commit, tag (`git tag v1.1.0`) and push.
 
 Users update with `claude plugin update webapp-docs-kit@webapp-docs-kit`,
-`codex plugin marketplace upgrade`, `npx skills update` or `git pull` (installer links).
+`codex plugin marketplace upgrade`, `npx skills@1.7.2 update` or `git pull` (installer links).
 
 ## Anthropic's directory (claude.ai / Claude Code)
 
@@ -65,7 +65,7 @@ Users update with `claude plugin update webapp-docs-kit@webapp-docs-kit`,
 
 ## Community catalogs
 
-- `npx skills add IHanfoxI/webapp-docs-kit` works as soon as the repo is public
+- `npx skills@1.7.2 add IHanfoxI/webapp-docs-kit` works as soon as the repo is public
   (the [skills CLI](https://github.com/vercel-labs/skills) discovers `skills/*/SKILL.md`).
   Installs are counted on <https://skills.sh>.
 - Add the GitHub topics `agent-skills`, `claude-code`, `codex`, `playwright` so

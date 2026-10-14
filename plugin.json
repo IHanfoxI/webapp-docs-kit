@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "webapp-docs-kit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Visual checks, user manuals (PDF/DOCX) and video walkthroughs (MP4) for web apps, captured from the real app with Playwright.",
   "extensions": {
     "com.openai": {

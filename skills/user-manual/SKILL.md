@@ -6,9 +6,9 @@ argument-hint: "[role | all]"
 
 # User manual
 
-Produces **one manual per role** with real screenshots of the app and the
-template in `template/manual-template.docx` (cover, header, footer and table of
-contents). The result follows `references/manual-style.md`.
+Produces **one manual per role** with real screenshots of the app and a neutral
+Word template (cover, header, footer and table of contents) that
+`scripts/build_template.py` generates on first use. The result follows `references/manual-style.md`.
 
 In this guide `$H` is this skill's `scripts/` folder and `$V` is
 `../visual-check/scripts`. `$V` holds the config loader, the login and the

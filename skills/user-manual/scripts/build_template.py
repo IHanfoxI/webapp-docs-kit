@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """
-build_template.py — writes the default manual template (template/manual-template.docx).
+build_template.py — writes the default manual template.
 
 Usage:
     python3 build_template.py [output.docx] [--primary 1F3A5F] [--accent 2563EB] [--letter]
+
+Without an output path it writes ~/.cache/webapp-docs-kit/manual-template.docx, the
+template build_manual.py uses by default (it also calls this script when that file is missing).
 
 The template is plain WordprocessingML written from scratch, so it carries no logos and
 no third-party branding. --primary is the table header color (theme accent1), --accent
@@ -17,7 +20,10 @@ import os
 import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_OUT = os.path.join(HERE, '..', 'template', 'manual-template.docx')
+DEFAULT_OUT = os.path.join(os.environ.get('XDG_CACHE_HOME') or os.path.join(os.path.expanduser('~'), '.cache'),
+                           'webapp-docs-kit', 'manual-template.docx')
+PRIMARY = '1F3A5F'
+ACCENT = '2563EB'
 
 W = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" ' \
     'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"'
@@ -261,8 +267,8 @@ def build(out, primary, accent, letter):
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('output', nargs='?', default=DEFAULT_OUT)
-    ap.add_argument('--primary', default='1F3A5F', help='table headers (hex, no #)')
-    ap.add_argument('--accent', default='2563EB', help='title lines and note bars (hex, no #)')
+    ap.add_argument('--primary', default=PRIMARY, help='table headers (hex, no #)')
+    ap.add_argument('--accent', default=ACCENT, help='title lines and note bars (hex, no #)')
     ap.add_argument('--letter', action='store_true', help='US Letter instead of A4')
     a = ap.parse_args()
     build(a.output, a.primary.lstrip('#').upper(), a.accent.lstrip('#').upper(), a.letter)
