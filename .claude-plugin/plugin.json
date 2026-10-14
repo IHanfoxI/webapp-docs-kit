@@ -10,5 +10,14 @@
   "homepage": "https://github.com/IHanfoxI/webapp-docs-kit",
   "repository": "https://github.com/IHanfoxI/webapp-docs-kit",
   "license": "MIT",
-  "keywords": ["playwright", "screenshots", "visual-testing", "user-manual", "documentation", "video", "tutorial"]
+  "icon": "./.claude-plugin/icon.png",
+  "keywords": [
+    "playwright",
+    "screenshots",
+    "visual-testing",
+    "user-manual",
+    "documentation",
+    "video",
+    "tutorial"
+  ]
 }
