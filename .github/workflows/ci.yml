@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate JSON manifests and examples
+        run: |
+          for f in $(git ls-files '*.json'); do
+            python -c "import json,sys; json.load(open(sys.argv[1], encoding='utf-8'))" "$f" && echo "ok $f"
+          done
+
+      - name: Check SKILL.md frontmatter
+        run: |
+          for d in skills/*/; do
+            name=$(basename "$d")
+            head -5 "$d/SKILL.md" | grep -q "^name: $name$" || { echo "::error file=$d/SKILL.md::name must be $name"; exit 1; }
+            head -5 "$d/SKILL.md" | grep -q "^description: " || { echo "::error file=$d/SKILL.md::missing description"; exit 1; }
+          done
+
+      - name: Check versions match
+        run: |
+          a=$(python -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
+          b=$(python -c "import json; print(json.load(open('plugin.json'))['version'])")
+          [ "$a" = "$b" ] || { echo "::error::version mismatch: .claude-plugin/plugin.json=$a plugin.json=$b"; exit 1; }
+
+      - name: Syntax check scripts
+        run: |
+          for f in $(git ls-files '*.js'); do node --check "$f"; done
+          python -m py_compile skills/user-manual/scripts/*.py
+          bash -n install.sh
+          pwsh -NoProfile -Command '$e=$null; [System.Management.Automation.Language.Parser]::ParseFile("install.ps1",[ref]$null,[ref]$e) | Out-Null; if ($e.Count) { $e; exit 1 }'
+
+      - name: Build template and example manual (DOCX)
+        run: |
+          python skills/user-manual/scripts/build_template.py "$RUNNER_TEMP/template.docx"
+          cd examples/todomvc/docs/manuals
+          python ../../../../skills/user-manual/scripts/build_manual.py visitor/manual.md "$RUNNER_TEMP/manual.docx" --template "$RUNNER_TEMP/template.docx"
